@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+# add the MatrixMarket metainfo header to a pure coordinate-triples file
+# http://math.nist.gov/MatrixMarket/formats.html#MMformat
+
+file = ARGV[0] or raise "need filename input"
+# (!STDOUT.tty?) or raise "stdout tty bad"
+open(file) do |f|
+  text = f.read(500)
+  if text =~ /^%%MatrixMarket/
+    raise "already seems to have the MatrixMarket header"
+  end
+  # if text !~ /\t/
+  #   raise "please make tab delimited first.  e.g.:\n  perl -pi -e 's/ +/\\t/g' #{file}"
+  # end
+end
+puts "%%MatrixMarket matrix coordinate real general"
+system "cat #{file} | awk '$1>I {I=$1}  $2>J {J=$2}  END { print I,J,NR }'"
+# system "cat #{file}"
