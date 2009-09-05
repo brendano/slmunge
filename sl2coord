@@ -8,11 +8,14 @@ import os,sys
 
 args = sys.argv[1:]
 outbase = args[-1]
+
+
 out_labels = open("%s.labels" % outbase,'w')
 out_feats = open("%s.feats" % outbase, 'w')
 print(out_labels, file=sys.stderr)
 print(out_feats, file=sys.stderr)
 for i,line in enumerate(sys.stdin):
+  if line.strip().startswith('#'): continue
   parts = line.split()
   label = parts.pop(0)
   print(i+1, 1, label,   file=out_labels, sep='\t')
