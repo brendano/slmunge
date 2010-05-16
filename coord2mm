@@ -28,6 +28,10 @@ open(file) do |f|
   #   raise "please make tab delimited first.  e.g.:\n  perl -pi -e 's/ +/\\t/g' #{file}"
   # end
 end
-puts "%%MatrixMarket matrix coordinate real general"
-system "cat #{file} | awk '$1>I {I=$1}  $2>J {J=$2}  END { print I,J,NR }'"
+mm_file = "#{file}.mm"
+puts "Writing to #{mm_file}"
+open(mm_file,'w') do |f|
+  f.puts "%%MatrixMarket matrix coordinate real general"
+  f.puts %x[cat #{file} | awk '$1>I {I=$1}  $2>J {J=$2}  END { print I,J,NR }']
+end
 # system "cat #{file}"
